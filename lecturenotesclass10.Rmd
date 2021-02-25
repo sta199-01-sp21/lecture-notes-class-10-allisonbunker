@@ -50,16 +50,26 @@ xtabs(~ Treatment + Improved, data = Arthritis) %>%
 
 - How many patients were enrolled in the clinical trial?
 
+84
+
 - What is the probability a randomly selected patient received the placebo?
+
+29/84
 
 - What is the probability a randomly selected patient received the placebo
   and had a marked improvement?
   
+7/84
+  
 - What is the probability a randomly selected patient received the placebo
   and the treatment?
   
+0
+  
 - What is the probability a randomly selected patient had some improvement or
   was on the treatment?
+  
+7/84
 
 ## Using computer simulations to calculate probabilities
 
@@ -74,7 +84,11 @@ marbles <- c("red", "red", "white", "red", "blue", "blue", "red", "blue")
 
 Suppose we draw a single marble from our imaginary box, where all the marbles
 are equally likely to be selected. What is the probability the marble is blue? 
+3 out of 8 
+
 How about white?
+
+one out of 8 
 
 We can simulate this "drawing" with the `sample()` function.
 
@@ -157,15 +171,32 @@ Perform a simulation to compute this empirical probability.
 
 Write down your guess to the answer before you calculate it.
 
+i would guess the first is more likely
+
 ```{r simulate_rolls}
+
+dice_roll_results<- tibble(
+  roll_1 = replicate(n = 10000, expr = sample(1:6, size = 1)),
+  roll_2 = replicate(n = 10000, expr = sample(1:6, size = 1))
+)
+
 
 ```
 
 ```{r identify_events}
 
+dice_roll_results<- dice_roll_results %>%
+  mutate(one = roll_1^2 == roll_2 , 
+         two = abs(roll_2-roll_1) == 4)
+
 ```
 
 ```{r summarize_rolls}
+
+dice_roll_results %>%
+  summarize(event_1_prob = mean(roll_1),
+            event_2_prob = mean(roll_2))
+
 
 ```
 
